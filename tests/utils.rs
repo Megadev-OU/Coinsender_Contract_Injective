@@ -68,8 +68,8 @@ pub fn instantiate_contract() -> (BasicApp, Addr) {
             Addr::unchecked("owner"),
             &InstantiateMsg {
                 bank: "bank".to_string(),
-                owner: "owner".to_string(),
-                fee: Uint128::from(1 * PERCENT_PRECISION), // 1%
+                // owner: "owner".to_string(),
+                // fee: Uint128::from(1 * PERCENT_PRECISION), // 1%
             },
             &[],
             "Contract",
@@ -77,18 +77,18 @@ pub fn instantiate_contract() -> (BasicApp, Addr) {
         )
         .unwrap();
 
-    let owner_account: String = app
-        .wrap()
-        .query_wasm_smart(
-            addr.clone(),
-            &QueryMsg::GetOwner {},
-        )
-        .unwrap();
+    // let owner_account: String = app
+    //     .wrap()
+    //     .query_wasm_smart(
+    //         addr.clone(),
+    //         &QueryMsg::GetOwner {},
+    //     )
+    //     .unwrap();
 
-    assert_eq!(
-        owner_account,
-        "owner".to_string()
-    );
+    // assert_eq!(
+    //     owner_account,
+    //     "owner".to_string()
+    // );
 
     let bank_account: String = app
         .wrap()
@@ -104,18 +104,18 @@ pub fn instantiate_contract() -> (BasicApp, Addr) {
     );
 
 
-    let fee: Uint128 = app
-        .wrap()
-        .query_wasm_smart(
-            addr.clone(),
-            &QueryMsg::GetFee {},
-        )
-        .unwrap();
+    // let fee: Uint128 = app
+    //     .wrap()
+    //     .query_wasm_smart(
+    //         addr.clone(),
+    //         &QueryMsg::GetFee {},
+    //     )
+    //     .unwrap();
 
-    assert_eq!(
-        fee,
-        Uint128::from(1 * PERCENT_PRECISION)
-    );
+    // assert_eq!(
+    //     fee,
+    //     Uint128::from(1 * PERCENT_PRECISION)
+    // );
 
     (app, addr)
 }

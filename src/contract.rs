@@ -11,8 +11,8 @@ use {
     },
 };
 
-use crate::contract::query::{get_bank, get_fee, get_owner};
-use crate::state::{BANK_ADDRESS, FEE, OWNER_ADDRESS};
+use crate::contract::query::get_bank;
+use crate::state::BANK_ADDRESS;
 
 const CONTRACT_NAME: &str = "crates.io:cosmwasm-contracts";
 const PERCENT_DECIMALS: u32 = 3;
@@ -25,9 +25,9 @@ pub fn instantiate(
     _info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    OWNER_ADDRESS.save(deps.storage, &msg.owner)?;
+    // OWNER_ADDRESS.save(deps.storage, &msg.owner)?;
     BANK_ADDRESS.save(deps.storage, &msg.bank)?;
-    FEE.save(deps.storage, &msg.fee)?;
+    // FEE.save(deps.storage, &msg.fee)?;
 
     Ok(Response::new().add_attribute("method", "instantiate"))
 }
@@ -40,7 +40,7 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        ExecuteMsg::TokenSender { recipient_amounts } => {
+        ExecuteMsg::TokenSender { recipient_amounts , fee} => {
             if info.funds.is_empty() {
                 return Err(ContractError::CustomError {
                     val: "No funds deposited!".to_string(),
@@ -63,7 +63,8 @@ pub fn execute(
                 total_amount += amount.u128()
             }
 
-            let fee_amount = total_amount * get_fee(deps.as_ref(), env.clone()).unwrap().u128() / PERCENT_PRECISION;
+            // let fee_amount = total_amount * get_fee(deps.as_ref(), env.clone()).unwrap().u128() / PERCENT_PRECISION;
+            let fee_amount = fee.u128() / PERCENT_PRECISION;
             total_amount += fee_amount;
 
 
@@ -93,79 +94,79 @@ pub fn execute(
 
             Ok(Response::new().add_messages(messages))
         }
-        ExecuteMsg::ChangeOwner { owner } => {
-            assert_eq!(
-                info.sender.to_string(),
-                OWNER_ADDRESS.load(deps.storage).unwrap(),
-                "This functionality is allowed for owner only"
-            );
+        // ExecuteMsg::ChangeOwner { owner } => {
+        //     assert_eq!(
+        //         info.sender.to_string(),
+        //         OWNER_ADDRESS.load(deps.storage).unwrap(),
+        //         "This functionality is allowed for owner only"
+        //     );
 
-            OWNER_ADDRESS.save(
-                deps.storage,
-                &owner,
-            )?;
+        //     OWNER_ADDRESS.save(
+        //         deps.storage,
+        //         &owner,
+        //     )?;
 
-            Ok(Response::default())
-        }
-        ExecuteMsg::ChangeBank { bank } => {
-            assert_eq!(
-                info.sender.to_string(),
-                OWNER_ADDRESS.load(deps.storage).unwrap(),
-                "This functionality is allowed for owner only"
-            );
+        //     Ok(Response::default())
+        // }
+        // ExecuteMsg::ChangeBank { bank } => {
+        //     assert_eq!(
+        //         info.sender.to_string(),
+        //         OWNER_ADDRESS.load(deps.storage).unwrap(),
+        //         "This functionality is allowed for owner only"
+        //     );
 
-            BANK_ADDRESS.save(
-                deps.storage,
-                &bank,
-            )?;
+        //     BANK_ADDRESS.save(
+        //         deps.storage,
+        //         &bank,
+        //     )?;
 
-            Ok(Response::default())
-        }
-        ExecuteMsg::ChangeFee { fee } => {
-            assert_eq!(
-                info.sender.to_string(),
-                OWNER_ADDRESS.load(deps.storage).unwrap(),
-                "This functionality is allowed for owner only"
-            );
+        //     Ok(Response::default())
+        // }
+        // ExecuteMsg::ChangeFee { fee } => {
+        //     assert_eq!(
+        //         info.sender.to_string(),
+        //         OWNER_ADDRESS.load(deps.storage).unwrap(),
+        //         "This functionality is allowed for owner only"
+        //     );
 
-            FEE.save(
-                deps.storage,
-                &fee,
-            )?;
+        //     FEE.save(
+        //         deps.storage,
+        //         &fee,
+        //     )?;
 
-            Ok(Response::default())
-        }
+        //     Ok(Response::default())
+        // }
     }
 }
 
 
 pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::GetOwner {} => {
-            to_binary(&get_owner(deps, env)?)
-        }
+        // QueryMsg::GetOwner {} => {
+        //     to_binary(&get_owner(deps, env)?)
+        // }
         QueryMsg::GetBank {} => {
             to_binary(&get_bank(deps, env)?)
         }
-        QueryMsg::GetFee {} => {
-            to_binary(&get_fee(deps, env)?)
-        }
+        // QueryMsg::GetFee {} => {
+        //     to_binary(&get_fee(deps, env)?)
+        // }
     }
 }
 
 
 pub mod query {
-    use crate::state::{BANK_ADDRESS, FEE, OWNER_ADDRESS};
+    use crate::state::BANK_ADDRESS;
     use super::*;
 
 
-    pub fn get_owner(
-        deps: Deps,
-        _env: Env,
-    ) -> StdResult<String> {
-        OWNER_ADDRESS
-            .load(deps.storage)
-    }
+    // pub fn get_owner(
+    //     deps: Deps,
+    //     _env: Env,
+    // ) -> StdResult<String> {
+    //     OWNER_ADDRESS
+    //         .load(deps.storage)
+    // }
 
     pub fn get_bank(
         deps: Deps,
@@ -175,11 +176,11 @@ pub mod query {
             .load(deps.storage)
     }
 
-    pub fn get_fee(
-        deps: Deps,
-        _env: Env,
-    ) -> StdResult<Uint128> {
-        FEE
-            .load(deps.storage)
-    }
+    // pub fn get_fee(
+    //     deps: Deps,
+    //     _env: Env,
+    // ) -> StdResult<Uint128> {
+    //     FEE
+    //         .load(deps.storage)
+    // }
 }

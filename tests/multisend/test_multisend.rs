@@ -20,13 +20,13 @@ mod tests {
 
         let (mut app, addr) = instantiate_contract();
 
-        let fee: Uint128 = app
-            .wrap()
-            .query_wasm_smart(
-                addr.clone(),
-                &QueryMsg::GetFee {},
-            )
-            .unwrap();
+        // let fee: Uint128 = app
+        //     .wrap()
+        //     .query_wasm_smart(
+        //         addr.clone(),
+        //         &QueryMsg::GetFee {},
+        //     )
+        //     .unwrap();
 
 
         let user_balance_before =
@@ -57,6 +57,7 @@ mod tests {
                 .amount
                 .u128();
 
+        let fee = Uint128::new(1);
 
         app.execute_contract(
             Addr::unchecked("owner"),
@@ -65,7 +66,8 @@ mod tests {
                 recipient_amounts:
                 vec![("recipient_1".to_string(), Uint128::from(AMOUNT_TO_RECIPIENT_1)),
                      ("recipient_2".to_string(), Uint128::from(AMOUNT_TO_RECIPIENT_2)),
-                ]
+                ],
+                fee
             },
             &coins(TOTAL_AMOUNT_FOR_RECIPIENTS + (TOTAL_AMOUNT_FOR_RECIPIENTS * fee.u128() / PERCENT_PRECISION), "eth"),
         )
@@ -132,7 +134,8 @@ mod tests {
                 recipient_amounts:
                 vec![("recipient_1".to_string(), Uint128::from(AMOUNT_TO_RECIPIENT_1)),
                      ("recipient_2".to_string(), Uint128::from(AMOUNT_TO_RECIPIENT_2)),
-                ]
+                ],
+                fee: Uint128::new(1)
             },
             &coins(TOTAL_AMOUNT_FOR_RECIPIENTS, "eth"),
         )
