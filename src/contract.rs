@@ -38,11 +38,7 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::TokenSender { recipient_amounts , fee} => {
-            if info.funds.is_empty() {
-                return Err(ContractError::CustomError {
-                    val: "No funds deposited!".to_string(),
-                });
-            }
+            
             if info.funds.len() != 1 {
                 return Err(ContractError::CustomError {
                     val: "You have to deposit one asset per time!".to_string(),

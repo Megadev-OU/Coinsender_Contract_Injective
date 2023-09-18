@@ -1,3 +1,0 @@
-cargo:rerun-if-changed=build/main.rs
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/valerii/IdeaProjects/coinSender/contracts-coinsender/cosmwasm-contracts/target/wasm32-unknown-unknown/release/build/typenum-3a55f4efd6ef4d4e/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Users/valerii/IdeaProjects/coinSender/contracts-coinsender/cosmwasm-contracts/target/wasm32-unknown-unknown/release/build/typenum-3a55f4efd6ef4d4e/out/op.rs
