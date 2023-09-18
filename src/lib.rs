@@ -4,7 +4,6 @@ use msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 pub mod contract;
 pub mod msg;
-mod state;
 mod error;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
