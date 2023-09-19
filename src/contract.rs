@@ -1,4 +1,4 @@
-use cosmwasm_std::CosmosMsg;
+use cosmwasm_std::{CosmosMsg, Addr};
 use {
     crate::{
         error::ContractError,
@@ -12,7 +12,7 @@ use {
 };
 
 use crate::contract::query::get_bank;
-pub const BANK_ADDRESS: Item<String> = Item::new("bank_address");
+pub const BANK_ADDRESS: Item<Addr> = Item::new("bank_address");
 
 // const CONTRACT_NAME: &str = "crates.io:cosmwasm-contracts";
 const PERCENT_DECIMALS: u32 = 3;
@@ -25,7 +25,8 @@ pub fn instantiate(
     _info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    BANK_ADDRESS.save(deps.storage, &msg.bank)?;
+    let bank = deps.api.addr_validate(&msg.bank)?;
+    BANK_ADDRESS.save(deps.storage, &bank)?;
     Ok(Response::new().add_attribute("method", "instantiate"))
 }
 
@@ -75,12 +76,10 @@ pub fn execute(
                 }));
             }
 
-            let bank_address = deps.api.addr_validate(&*get_bank(deps.as_ref(), env).unwrap())?;
-
+            let bank_address = get_bank(deps.as_ref(), env)?;
             messages.push(CosmosMsg::Bank(BankMsg::Send {
                 to_address: bank_address.to_string(),
                 amount: coins(fee_amount.clone(), deposited_token.denom.clone()),
-
             }));
 
             Ok(Response::new().add_messages(messages))
@@ -104,7 +103,7 @@ pub mod query {
     pub fn get_bank(
         deps: Deps,
         _env: Env,
-    ) -> StdResult<String> {
+    ) -> StdResult<Addr> {
         BANK_ADDRESS
             .load(deps.storage)
     }
