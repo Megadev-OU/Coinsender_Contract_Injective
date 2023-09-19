@@ -38,7 +38,7 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::TokenSender { recipient_amounts , fee} => {
-            
+
             if info.funds.len() != 1 {
                 return Err(ContractError::CustomError {
                     val: "You have to deposit one asset per time!".to_string(),
@@ -56,6 +56,7 @@ pub fn execute(
             }
 
             let fee_amount =  total_amount * fee.u128() / PERCENT_PRECISION;
+
             total_amount += fee_amount;
 
             if !(deposited_token_amount > 0 && total_amount == deposited_token_amount) {

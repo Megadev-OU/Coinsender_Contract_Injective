@@ -46,7 +46,7 @@ mod tests {
                 .amount
                 .u128();
 
-        let fee = Uint128::new(1 * PERCENT_PRECISION ); // 1%
+        let fee = Uint128::new(10); // 1%
 
         app.execute_contract(
             Addr::unchecked("user"),

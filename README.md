@@ -7,6 +7,6 @@
 
 ## Fee calculation
 
-Usage fee in smart contract is represend as percent number multiplied by 1000
-1 % should be passed "1000" as agrument, 2.35 % as 2350
-
+Usage fee in smart contract is represend as percent number multiplied by 10  
+1 % should be passed "10" as agrument, 2.3 % as 23, 25 % as 250  
+fee argument as float is not supported
