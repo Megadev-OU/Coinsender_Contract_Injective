@@ -18,6 +18,9 @@ pub const BANK_ADDRESS: Item<Addr> = Item::new("bank_address");
 const PERCENT_DECIMALS: u32 = 3;
 pub const PERCENT_PRECISION: u128 = 10u128.pow(PERCENT_DECIMALS);
 
+// Allowed fee range is 0.1% - 5%
+pub const MAX_FEE: u128 = 50;
+
 
 pub fn instantiate(
     deps: DepsMut,
@@ -46,6 +49,12 @@ pub fn execute(
                 });
             }
 
+            if fee.u128() > MAX_FEE {
+                return Err(ContractError::CustomError {
+                    val: "Incorect fee value".to_string(),
+                });                
+            }
+            
             let mut messages: Vec<CosmosMsg> = vec![];
 
             let deposited_token = info.funds.first().unwrap();
