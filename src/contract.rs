@@ -49,7 +49,7 @@ pub fn execute(
                 });
             }
 
-            if fee.u128() > MAX_FEE {
+            if (fee.u128() == 0) | (fee.u128() > MAX_FEE) {
                 return Err(ContractError::CustomError {
                     val: "Incorect fee value".to_string(),
                 });                
