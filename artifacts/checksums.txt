@@ -1,0 +1,1 @@
+bc1bc5a90bf77430eca19f9a3dee225aafe786a782fe6f49c70ee47bc98812d7  cosmwasm_contracts.wasm

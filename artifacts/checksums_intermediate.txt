@@ -1,0 +1,1 @@
+c0b5e84eaba3da075f6264c96abe867554aa9347f3891326b788ba9d06e82314  /target/wasm32-unknown-unknown/release/cosmwasm_contracts.wasm
